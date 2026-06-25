@@ -1,29 +1,31 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar.jsx";
+import AuthLayout from "./layouts/AuthLayout.jsx";
+import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
 import "./index.css";
-
-const Placeholder = ({ title }) => (
-  <main className="mx-auto max-w-6xl px-4 py-12 md:px-8">
-    <h1 className="font-Poppins text-3xl font-semibold text-neutral-900">{title}</h1>
-  </main>
-);
+import Products from "./components/Products.jsx";
+import BestSelling from "./components/BestSelling.jsx";
+import Events from "./components/Events.jsx";
+import FAQs from "./components/FAQs.jsx";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <Routes>
+      <Routes>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/best-selling" element={<Placeholder title="Best Selling" />} />
-          <Route path="/products" element={<Placeholder title="Products" />} />
-          <Route path="/events" element={<Placeholder title="Events" />} />
-          <Route path="/faq" element={<Placeholder title="FAQ" />} />
-          <Route path="/login" element={<Placeholder title="Login" />} />
-          <Route path="/register" element={<Placeholder title="Get Started" />} />
-        </Routes>
-      </div>
+          <Route path="/best-selling" element={<BestSelling />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/faq" element={<FAQs />} />
+        </Route>
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Signup />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }
