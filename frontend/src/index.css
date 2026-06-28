@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+@layer base {
+  :root {
+    --color-primary: #5cae8f;
+    --color-brand: #2c3e6b;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }

@@ -7,7 +7,8 @@ const linkClassName = ({ isActive }) =>
 
 const Navbar = () => {
   return (
-    <nav className="relative mx-auto flex max-w-full items-center justify-between bg-[#f3f2ee] px-5 py-4">
+    <nav className="bg-[#f3f2ee]">
+      <div className="container relative mx-auto flex items-center justify-between px-4 py-4 lg:px-6">
       <Link to="/" className="flex shrink-0 items-center gap-2.5">
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-900">
           <Sparkles className="h-4 w-4 text-white" strokeWidth={2.25} />
@@ -48,6 +49,7 @@ const Navbar = () => {
         >
           Get Started
         </Link>
+      </div>
       </div>
     </nav>
   );

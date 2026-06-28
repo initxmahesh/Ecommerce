@@ -4,7 +4,6 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
-import "./index.css";
 import Products from "./components/Products.jsx";
 import BestSelling from "./components/BestSelling.jsx";
 import Events from "./components/Events.jsx";
