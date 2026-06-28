@@ -11,7 +11,7 @@ const AdsSection = ({ ads = [], columns }) => {
   const columnCount = columns ?? (ads.length === 1 ? 1 : 2);
 
   return (
-    <section className="bg-white pb-8 font-Poppins">
+    <section className="bg-white font-Poppins">
       <div className="container mx-auto px-4 lg:px-6">
         <div className={`grid gap-4 ${gridClasses[columnCount] ?? gridClasses[2]}`}>
           {ads.map((ad) => (
