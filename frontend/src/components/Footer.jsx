@@ -9,8 +9,6 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Link } from "react-router-dom";
 
-const PRIMARY_COLOR = "#5cae8f";
-
 const shopLinks = [
   { label: "Browse Categories", to: "/products" },
   { label: "New Arrivals", to: "/new-arrivals" },
@@ -180,14 +178,14 @@ const Footer = () => {
     <footer className="font-Poppins">
       <div className="border-t border-neutral-200 bg-neutral-50 py-6">
         <div className="container mx-auto flex flex-col gap-10 px-4 lg:px-6 xl:flex-row xl:items-start xl:gap-16">
-          {/* Brand — 20% on xl */}
+          {/* Brand - 20% on xl */}
           <div className="shrink-0 xl:w-1/5">
             <Link to="/" className="mb-4 flex items-center gap-2">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl">
                 <HugeiconsIcon
                   icon={ShoppingBag03Icon}
                   size={30}
-                  primaryColor={PRIMARY_COLOR}
+                  className="text-primary object-contain"
                   strokeWidth={2}
                 />
               </span>
@@ -209,7 +207,7 @@ const Footer = () => {
                     key={label}
                     href={href}
                     aria-label={label}
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-opacity hover:opacity-90"
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white transition-opacity hover:opacity-90"
                   >
                     {icon}
                   </a>
@@ -218,7 +216,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Link columns — remaining width on xl */}
+          {/* Link columns */}
           <div className="min-w-0 flex-1">
             <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-8 xl:gap-y-0">
               {linkColumns.map((column) => (
@@ -240,7 +238,8 @@ const Footer = () => {
               <HugeiconsIcon
                 icon={icon}
                 size={32}
-                primaryColor={PRIMARY_COLOR}
+                className="text-primary"
+                // primaryColor="currentColor"
                 strokeWidth={2}
               />
               <div className="text-sm leading-tight text-neutral-800">
@@ -252,10 +251,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div
-        className="bg-primary px-4 py-4 lg:px-6"
-        style={{ backgroundColor: PRIMARY_COLOR }}
-      >
+      <div className="bg-primary px-4 py-4 lg:px-6">
         <div className="container mx-auto flex flex-col items-center justify-center gap-4 lg:flex-row lg:justify-between">
           <p className="text-center text-sm text-white sm:text-left">
             Copyright © VendorFlow all rights reserved.

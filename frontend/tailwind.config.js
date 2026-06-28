@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,js,jsx}"],
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     fontFamily: {
       Roboto: ["Roboto", "sans-serif"],
@@ -8,6 +8,10 @@ export default {
       Serif: ["Cormorant Garamond", "serif"],
     },
     extend: {
+      colors: {
+        primary: "var(--color-primary)",
+        brand: "var(--color-brand)",
+      },
       screens: {
         "1000px": "1050px",
         "1100px": "1110px",
