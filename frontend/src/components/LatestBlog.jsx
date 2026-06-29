@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BLOG_POSTS, HOME_BLOG_COUNT } from "../data/blogData.js";
 import BlogCard from "./blog/BlogCard.jsx";
@@ -24,9 +25,10 @@ const LatestBlog = ({
 
           <Link
             to={allBlogsLink}
-            className="inline-flex shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-black/70 shadow-sm transition hover:border-primary hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-black/70 transition hover:text-primary"
           >
             All Blogs
+            <ArrowRight className="h-4 w-4" strokeWidth={2} />
           </Link>
         </div>
 

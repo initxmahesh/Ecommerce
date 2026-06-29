@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DEAL_PRODUCTS,
@@ -25,9 +26,10 @@ const DayOfTheDeal = () => {
           {hasMore && (
             <Link
               to="/deal-and-offers"
-              className="inline-flex shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-black/70 shadow-sm transition hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-black/70 transition hover:text-primary"
             >
               Show More
+              <ArrowRight className="h-4 w-4" strokeWidth={2} />
             </Link>
           )}
         </div>

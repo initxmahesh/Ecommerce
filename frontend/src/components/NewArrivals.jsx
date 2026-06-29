@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   HOME_NEW_ARRIVALS_COUNT,
@@ -31,9 +32,10 @@ const NewArrivals = ({
           {shouldShowMore && (
             <Link
               to={moreLink}
-              className="inline-flex shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-black/70 shadow-sm transition hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-black/70 transition hover:text-primary"
             >
               {moreLabel}
+              <ArrowRight className="h-4 w-4" strokeWidth={2} />
             </Link>
           )}
         </div>

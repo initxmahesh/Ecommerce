@@ -1,4 +1,5 @@
 import AdsSection from "../components/AdsSection.jsx";
+import Categories from "../components/Categories.jsx";
 import DayOfTheDeal from "../components/DayOfTheDeal.jsx";
 import Hero from "../components/Hero.jsx";
 import LatestBlog from "../components/LatestBlog.jsx";
@@ -10,6 +11,7 @@ const Home = () => {
     <>
       <Hero />
       <DayOfTheDeal />
+      <Categories />
       <AdsSection ads={HOME_ADS} columns={1} />
       <NewArrivals />
       <AdsSection ads={PROMO_ADS} columns={2} />
