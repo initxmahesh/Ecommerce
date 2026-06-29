@@ -3,6 +3,7 @@ import AuthLayout from "./layouts/AuthLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Deals from "./pages/Deals.jsx";
 import Home from "./pages/Home.jsx";
+import BlogDetail from "./pages/BlogDetail.jsx";
 import Blogs from "./pages/Blogs.jsx";
 import NewArrivalsPage from "./pages/NewArrivals.jsx";
 import Login from "./pages/Login.jsx";
@@ -21,6 +22,7 @@ function App() {
           <Route path="/deal-and-offers" element={<Deals />} />
           <Route path="/new-arrivals" element={<NewArrivalsPage />} />
           <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/best-selling" element={<BestSelling />} />
           <Route path="/products" element={<Products />} />
           <Route path="/events" element={<Events />} />
