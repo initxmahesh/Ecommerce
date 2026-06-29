@@ -29,7 +29,7 @@ const userTypes = [
 ];
 
 const inputClassName =
-  "w-full rounded-xl border border-transparent bg-[#f5efe6] px-4 py-3 font-Poppins text-[14px] text-neutral-900 placeholder:text-neutral-400 focus:border-[#1a2b3c]/20 focus:outline-none focus:ring-2 focus:ring-[#1a2b3c]/10";
+  "h-10 w-full rounded-xl border border-transparent bg-[#f5efe6] px-4 font-Poppins text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-[#1a2b3c]/20 focus:outline-none focus:ring-2 focus:ring-[#1a2b3c]/10";
 
 function Signup() {
   const [userType, setUserType] = useState("buyer");
@@ -43,45 +43,45 @@ function Signup() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="relative hidden w-1/2 flex-col justify-between bg-[#1a2b3c] px-12 py-10 lg:flex">
+      <div className="relative hidden w-1/2 flex-col justify-between bg-[#1a2b3c] px-8 py-8 lg:flex lg:px-12 lg:py-10">
         <Link to="/" className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
             <Sparkles className="h-4 w-4 text-white" strokeWidth={2.25} />
           </span>
-          <span className="font-Poppins text-[15px] font-semibold tracking-tight text-white">
+          <span className="font-Poppins text-sm font-semibold tracking-tight text-white sm:text-base">
             VendorFlow
           </span>
         </Link>
 
         <div className="max-w-md">
-          <h1 className="font-Serif text-[42px] font-semibold leading-[1.15] tracking-tight text-white">
+          <h1 className="font-Serif text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
             The marketplace OS built for ambitious operators.
           </h1>
-          <p className="mt-4 font-Poppins text-[15px] leading-relaxed text-white/70">
+          <p className="mt-4 font-Poppins text-sm leading-relaxed text-white/70 sm:text-base">
             Buyers shop. Sellers sell. Admins orchestrate.
           </p>
         </div>
       </div>
 
-      <div className="flex w-full flex-col items-center justify-center bg-[#fdfbf7] px-6 py-12 lg:w-1/2">
-        <div className="w-full max-w-[400px]">
-          <div className="mb-8 flex items-center gap-2.5 lg:hidden">
+      <div className="flex w-full flex-col items-center justify-center bg-[#fdfbf7] px-4 py-8 sm:px-6 sm:py-12 lg:w-1/2">
+        <div className="w-full max-w-md">
+          <div className="mb-6 flex items-center gap-2.5 sm:mb-8 lg:hidden">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-900">
               <Sparkles className="h-4 w-4 text-white" strokeWidth={2.25} />
             </span>
-            <span className="font-Poppins text-[15px] font-semibold tracking-tight text-neutral-900">
+            <span className="font-Poppins text-sm font-semibold tracking-tight text-neutral-900 sm:text-base">
               VendorFlow
             </span>
           </div>
 
-          <h2 className="font-Serif text-[36px] font-semibold leading-tight text-[#1a2b3c]">
+          <h2 className="font-Serif text-2xl font-semibold leading-tight text-[#1a2b3c] sm:text-3xl">
             Create your account
           </h2>
-          <p className="mt-2 font-Poppins text-[14px] text-neutral-500">
+          <p className="mt-2 font-Poppins text-sm text-neutral-500">
             Start in seconds. Free to begin.
           </p>
 
-          <div className="mt-8 grid grid-cols-2 gap-3">
+          <div className="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:mt-8">
             {userTypes.map(({ id, label, icon: Icon }) => {
               const isSelected = userType === id;
               return (
@@ -89,7 +89,7 @@ function Signup() {
                   key={id}
                   type="button"
                   onClick={() => setUserType(id)}
-                  className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 font-Poppins text-[13px] font-medium transition-colors ${
+                  className={`flex h-10 items-center justify-center gap-2 rounded-xl border px-3 font-Poppins text-xs font-medium transition-colors sm:text-sm ${
                     isSelected
                       ? "border-[#1a2b3c] bg-white text-[#1a2b3c]"
                       : "border-neutral-200 bg-white text-neutral-500 hover:border-neutral-300"
@@ -104,7 +104,7 @@ function Signup() {
 
           <button
             type="button"
-            className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 font-Poppins text-[14px] font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+            className="mt-5 flex h-10 w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 font-Poppins text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 sm:mt-6"
           >
             <GoogleIcon />
             Continue with Google
@@ -112,7 +112,7 @@ function Signup() {
 
           <div className="my-6 flex items-center gap-4">
             <div className="h-px flex-1 bg-neutral-200" />
-            <span className="font-Poppins text-[12px] font-medium uppercase tracking-wider text-neutral-400">
+            <span className="font-Poppins text-xs font-medium uppercase tracking-wider text-neutral-400">
               or
             </span>
             <div className="h-px flex-1 bg-neutral-200" />
@@ -122,7 +122,7 @@ function Signup() {
             <div>
               <label
                 htmlFor="name"
-                className="mb-1.5 block font-Poppins text-[13px] font-medium text-neutral-600"
+                className="mb-1.5 block font-Poppins text-xs font-medium text-neutral-600 sm:text-sm"
               >
                 Name
               </label>
@@ -139,7 +139,7 @@ function Signup() {
             <div>
               <label
                 htmlFor="email"
-                className="mb-1.5 block font-Poppins text-[13px] font-medium text-neutral-600"
+                className="mb-1.5 block font-Poppins text-xs font-medium text-neutral-600 sm:text-sm"
               >
                 Email
               </label>
@@ -156,7 +156,7 @@ function Signup() {
             <div>
               <label
                 htmlFor="password"
-                className="mb-1.5 block font-Poppins text-[13px] font-medium text-neutral-600"
+                className="mb-1.5 block font-Poppins text-xs font-medium text-neutral-600 sm:text-sm"
               >
                 Password
               </label>
@@ -172,13 +172,13 @@ function Signup() {
 
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#1a2b3c] px-4 py-3.5 font-Poppins text-[14px] font-medium text-white transition-colors hover:bg-[#243b55]"
+              className="h-12 w-full rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55]"
             >
               Create account
             </button>
           </form>
 
-          <p className="mt-8 text-center font-Poppins text-[13px] text-neutral-500">
+          <p className="mt-6 text-center font-Poppins text-xs text-neutral-500 sm:mt-8 sm:text-sm">
             Already have an account?{" "}
             <Link
               to="/login"

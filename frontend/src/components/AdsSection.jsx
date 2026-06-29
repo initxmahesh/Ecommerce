@@ -12,8 +12,10 @@ const AdsSection = ({ ads = [], columns }) => {
 
   return (
     <section className="bg-white font-Poppins">
-      <div className="container mx-auto px-4 lg:px-6">
-        <div className={`grid gap-4 ${gridClasses[columnCount] ?? gridClasses[2]}`}>
+      <div className="page-container">
+        <div
+          className={`grid gap-3 sm:gap-5 ${gridClasses[columnCount] ?? gridClasses[2]}`}
+        >
           {ads.map((ad) => (
             <AdBanner key={ad.id} {...ad} />
           ))}

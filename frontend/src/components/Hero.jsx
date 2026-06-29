@@ -219,9 +219,9 @@ const Hero = () => {
 
   return (
     <section className="font-Poppins">
-      <div className="container mx-auto px-4 lg:px-6">
+      <div className="page-container">
         <div
-          className="group relative aspect-[21/9] overflow-hidden bg-neutral-100 shadow-lg ring-1 ring-black/5 sm:aspect-[2.4/1]"
+          className="group relative aspect-[16/9] overflow-hidden bg-neutral-100 shadow-lg ring-1 ring-black/5 sm:aspect-[2.4/1]"
           aria-roledescription="carousel"
           aria-label="Featured promotions"
           onMouseEnter={handleMouseEnter}
@@ -235,7 +235,10 @@ const Hero = () => {
           >
             <motion.div
               className="flex h-full cursor-grab touch-pan-y active:cursor-grabbing"
-              style={{ x, width: slideWidth ? slideWidth * SLIDES.length : "100%" }}
+              style={{
+                x,
+                width: slideWidth ? slideWidth * SLIDES.length : "100%",
+              }}
               drag={SLIDES.length > 1 && slideWidth > 0 ? "x" : false}
               dragConstraints={dragConstraints}
               dragElastic={0.08}
@@ -259,9 +262,7 @@ const Hero = () => {
                     initial={false}
                     animate={{
                       scale:
-                        index === activeIndex &&
-                        !isPaused &&
-                        !reducedMotion
+                        index === activeIndex && !isPaused && !reducedMotion
                           ? 1.06
                           : 1,
                     }}
@@ -288,7 +289,7 @@ const Hero = () => {
                 onClick={() => paginate(-1)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
-                className="pointer-events-none absolute left-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/80 p-2 text-brand opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-200 group-hover:pointer-events-auto group-hover:opacity-100 sm:flex"
+                className="pointer-events-auto absolute left-2 top-1/2 z-10 flex rounded-full bg-white/80 p-1.5 text-brand shadow-md backdrop-blur-sm transition-opacity duration-200 sm:left-4 sm:p-2 opacity-0 sm:group-hover:pointer-events-auto sm:group-hover:opacity-100"
               >
                 <ChevronLeft className="h-5 w-5" strokeWidth={2} />
               </motion.button>
@@ -299,13 +300,13 @@ const Hero = () => {
                 onClick={() => paginate(1)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
-                className="pointer-events-none absolute right-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/80 p-2 text-brand opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-200 group-hover:pointer-events-auto group-hover:opacity-100 sm:flex"
+                className="pointer-events-auto absolute right-2 top-1/2 z-10 flex rounded-full bg-white/80 p-1.5 text-brand shadow-md backdrop-blur-sm transition-opacity duration-200 sm:right-4 sm:p-2 sm:opacity-0 sm:group-hover:pointer-events-auto sm:group-hover:opacity-100"
               >
                 <ChevronRight className="h-5 w-5" strokeWidth={2} />
               </motion.button>
 
               <div
-                className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2"
+                className="absolute bottom-3 left-1/2 z-10 flex max-w-full -translate-x-1/2 flex-wrap items-center justify-center gap-1.5 px-4 sm:bottom-4 sm:gap-2"
                 role="tablist"
                 aria-label="Carousel pagination"
               >

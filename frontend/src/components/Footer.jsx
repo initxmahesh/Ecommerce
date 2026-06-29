@@ -176,8 +176,8 @@ const LinkColumn = ({ title, links }) => (
 const Footer = () => {
   return (
     <footer className="font-Poppins">
-      <div className="border-t border-neutral-200 bg-neutral-50 py-6">
-        <div className="container mx-auto flex flex-col gap-10 px-4 lg:px-6 xl:flex-row xl:items-start xl:gap-16">
+      <div className="border-t border-neutral-200 bg-neutral-50 py-8 sm:py-10">
+        <div className="page-container flex flex-col gap-8 sm:gap-10 xl:flex-row xl:items-start xl:gap-16">
           {/* Brand - 20% on xl */}
           <div className="shrink-0 xl:w-1/5">
             <Link to="/" className="mb-4 flex items-center gap-2">
@@ -201,7 +201,7 @@ const Footer = () => {
               <h4 className="mb-3 text-sm font-bold text-neutral-800">
                 Follow Us
               </h4>
-              <div className="flex flex-wrap justify-between">
+              <div className="flex flex-wrap gap-3 sm:gap-7">
                 {socialLinks.map(({ label, href, icon }) => (
                   <a
                     key={label}
@@ -218,7 +218,7 @@ const Footer = () => {
 
           {/* Link columns */}
           <div className="min-w-0 flex-1">
-            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-8 xl:gap-y-0">
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 sm:gap-8 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-8 xl:gap-y-0">
               {linkColumns.map((column) => (
                 <LinkColumn key={column.title} {...column} />
               ))}
@@ -229,7 +229,7 @@ const Footer = () => {
 
       {/* Trust highlights */}
       <div className="border-t border-b border-neutral-200 bg-white py-3">
-        <div className="container mx-auto grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-0 lg:divide-x lg:divide-neutral-200">
+        <div className="page-container grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-0 lg:divide-x lg:divide-neutral-200">
           {trustHighlights.map(({ icon, title, subtitle }) => (
             <div
               key={title}
@@ -251,13 +251,13 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="bg-primary px-4 py-4 lg:px-6">
-        <div className="container mx-auto flex flex-col items-center justify-center gap-4 lg:flex-row lg:justify-between">
+      <div className="bg-primary py-4">
+        <div className="page-container flex flex-col items-center justify-center gap-4 lg:flex-row lg:justify-between">
           <p className="text-center text-sm text-white sm:text-left">
             Copyright © VendorFlow all rights reserved.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-10">
+          <div className="flex flex-wrap items-center justify-between gap-4 sm:gap-6 lg:gap-10">
             <Link
               to="/privacy-policy"
               className="text-sm text-white hover:text-neutral-200"

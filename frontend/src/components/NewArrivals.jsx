@@ -17,14 +17,14 @@ const NewArrivals = ({
   const shouldShowMore = showMore ?? products.length > limit;
 
   return (
-    <section className="bg-white py-10 font-Poppins">
-      <div className="container mx-auto px-4 lg:px-6">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <section className="bg-white py-8 font-Poppins lg:py-12">
+      <div className="page-container">
+        <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-black/70">
+            <h2 className="text-xl font-bold tracking-tight text-black/70 md:text-2xl">
               New <span className="text-primary">Arrivals</span>
             </h2>
-            <p className="mt-1 text-sm text-neutral-400 sm:text-base">
+            <p className="mt-1 text-sm text-neutral-400 md:text-base">
               Shop online for new arrivals and get free shipping!
             </p>
           </div>
@@ -40,7 +40,7 @@ const NewArrivals = ({
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 min-[500px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {previewProducts.map((product) => (
             <DealProductCard key={product.id} product={product} />
           ))}

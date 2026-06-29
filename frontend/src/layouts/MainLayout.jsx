@@ -6,7 +6,9 @@ function MainLayout() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

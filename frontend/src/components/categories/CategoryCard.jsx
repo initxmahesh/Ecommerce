@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const CategoryCard = ({ category, to = "/products" }) => (
   <Link
     to={to}
-    className="group flex aspect-[2/2] flex-col overflow-hidden rounded-xl bg-white"
+    className="group flex aspect-square flex-col overflow-hidden rounded-lg bg-white sm:rounded-xl"
   >
     <div className="relative min-h-0 flex-1 overflow-hidden">
       <img
@@ -15,10 +15,12 @@ const CategoryCard = ({ category, to = "/products" }) => (
       />
     </div>
 
-    <div className="border-x border-b rounded-b-xl border-gray-300 bg-white px-3 py-3">
-      <h3 className="text-base font-semibold text-black/80">{category.title}</h3>
-      <div className="mt-1 flex items-center justify-between">
-        <span className="text-sm text-neutral-500 transition-colors group-hover:text-primary">
+    <div className="rounded-b-lg border-x border-b border-gray-300 bg-white px-2 py-2 sm:rounded-b-xl sm:px-3 sm:py-3">
+      <h3 className="text-sm font-semibold text-black/80 sm:text-base">
+        {category.title}
+      </h3>
+      <div className="mt-1 flex items-center justify-between gap-1">
+        <span className="text-xs text-neutral-500 transition-colors group-hover:text-primary sm:text-sm">
           Shop Now
         </span>
         <ArrowRight

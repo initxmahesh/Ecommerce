@@ -25,16 +25,16 @@ const BlogCard = ({ post }) => {
 
       <div className="h-px bg-neutral-100" aria-hidden="true" />
 
-      <div className="flex flex-1 flex-col p-4">
-        <p className="text-xs text-neutral-400">{post.date}</p>
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <p className="text-[10px] text-neutral-400 sm:text-xs">{post.date}</p>
 
-        <h3 className="mt-2 line-clamp-2 text-sm font-semibold leading-snug text-black/70 transition-colors group-hover:text-primary sm:text-[15px]">
+        <h3 className="mt-1.5 line-clamp-2 text-xs font-semibold leading-snug text-black/70 transition-colors group-hover:text-primary sm:mt-2 sm:text-sm">
           <Link to={postLink}>{post.title}</Link>
         </h3>
 
         <Link
           to={postLink}
-          className="mt-auto inline-flex items-center gap-1 pt-4 text-xs font-medium text-neutral-400 transition-colors group-hover:text-primary sm:text-sm"
+          className="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-medium text-neutral-400 transition-colors group-hover:text-primary sm:pt-4 sm:text-xs"
         >
           Read More
           <span
