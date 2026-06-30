@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down",
+    "migrate:status": "migrate-mongo status",
+    "migrate:create": "migrate-mongo create",
+    "db:seed": "node scripts/seed.js"
   },
   "keywords": [],
   "author": "@initxmahesh",
@@ -24,5 +29,8 @@
     "mongoose": "^9.7.1",
     "morgan": "^1.11.0",
     "nodemailer": "^9.0.2"
+  },
+  "devDependencies": {
+    "migrate-mongo": "^14.0.7"
   }
 }

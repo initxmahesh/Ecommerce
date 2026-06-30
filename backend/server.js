@@ -1,6 +1,7 @@
 import app from './app.js';
 import env from './config/env.js';
 import connectDB from './config/database.js';
+import './models/index.js';
 
 const startServer = async () => {
   try {
