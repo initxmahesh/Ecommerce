@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const badgeStyles = {
   SALE: "bg-[#f4a4a4] text-white",
@@ -25,7 +26,10 @@ const StarRating = ({ rating }) => (
 );
 
 const DealProductCard = ({ product }) => (
-  <article className="overflow-hidden rounded-lg border border-neutral-200 bg-white transition-shadow hover:shadow-lg hover:shadow-black/30">
+  <Link
+    to={`/products/${product.id}`}
+    className="group block overflow-hidden rounded-lg border border-neutral-200 bg-white transition-shadow hover:shadow-lg hover:shadow-black/30"
+  >
     <div className="relative flex aspect-square items-center justify-center bg-white p-2 sm:p-4">
       {product.badge && (
         <span
@@ -70,7 +74,7 @@ const DealProductCard = ({ product }) => (
         </span>
       </div>
     </div>
-  </article>
+  </Link>
 );
 
 export default DealProductCard;

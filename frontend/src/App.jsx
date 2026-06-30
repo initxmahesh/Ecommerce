@@ -4,6 +4,7 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import Deals from "./pages/Deals.jsx";
 import Home from "./pages/Home.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
+import ProductDetail from "./pages/ProductDetail.jsx";
 import Blogs from "./pages/Blogs.jsx";
 import NewArrivalsPage from "./pages/NewArrivals.jsx";
 import Login from "./pages/Login.jsx";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/best-selling" element={<BestSelling />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/events" element={<Events />} />
           <Route path="/faq" element={<FAQs />} />
         </Route>

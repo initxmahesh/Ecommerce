@@ -109,7 +109,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     {results.map((product) => (
                       <li key={product.id}>
                         <Link
-                          to="/products"
+                          to={`/products/${product.id}`}
                           onClick={onClose}
                           className="flex items-center gap-3 rounded-lg px-2 py-3 transition-colors hover:bg-neutral-50"
                         >
