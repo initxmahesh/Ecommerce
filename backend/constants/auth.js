@@ -29,3 +29,26 @@ export const DEVICE_TYPE = {
 export const SOCIAL_PROVIDER = {
   GOOGLE: "google",
 };
+
+export const USER_TYPE = {
+  BUYER: "buyer",
+  SELLER: "seller",
+};
+
+export const USER_TYPE_TO_ROLE = {
+  [USER_TYPE.BUYER]: "customer",
+  [USER_TYPE.SELLER]: "vendor_owner",
+};
+
+export const AUTH_COOKIE = {
+  REFRESH_TOKEN: "refreshToken",
+};
+
+export const LOCKOUT = {
+  MAX_ATTEMPTS: 5,
+  LOCK_MINUTES: 15,
+};
+
+export const TOKEN_EXPIRY = {
+  EMAIL_VERIFICATION_HOURS: 24,
+};
