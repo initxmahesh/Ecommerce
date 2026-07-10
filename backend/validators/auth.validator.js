@@ -63,7 +63,25 @@ export function validateEmailOnly(body) {
   return { email: body.email.trim() };
 }
 
+function normalizeToken(value) {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  const token = Array.isArray(value) ? value[0] : value;
+
+  if (typeof token !== "string" || token.trim() === "") {
+    return null;
+  }
+
+  return token.trim();
+}
+
 export function validateVerifyEmail(body) {
-  requireField(body.token, "Token");
-  return { token: body.token.trim() };
+  const token = normalizeToken(body.token);
+  if (!token) {
+    throw new AppError("Token is required", 400, "MISSING_TOKEN");
+  }
+
+  return { token };
 }

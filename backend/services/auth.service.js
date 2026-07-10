@@ -203,7 +203,7 @@ export async function register({ name, email, password, userType }, reqMeta) {
   const role = await assignRole(user._id, userType);
   const verificationToken = await createEmailVerification(user._id);
 
-  await sendVerificationEmail({
+  const emailResult = await sendVerificationEmail({
     to: user.email,
     firstName: user.firstName,
     token: verificationToken,
@@ -222,6 +222,9 @@ export async function register({ name, email, password, userType }, reqMeta) {
     ]),
     message:
       "Account created. Please check your email to verify your account before signing in.",
+    ...(env.nodeEnv === "development" && !emailResult.sent
+      ? { devVerifyUrl: emailResult.verifyUrl }
+      : {}),
   };
 }
 

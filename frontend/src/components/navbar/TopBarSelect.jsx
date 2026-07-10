@@ -70,6 +70,30 @@ const TopBarSelect = ({
               option.code === value || option.label === value || option.to === value;
 
             if (variant === "links") {
+              if (option.onClick) {
+                return (
+                  <li key={option.label} role="option" aria-selected={isSelected}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        option.onClick();
+                        setIsOpen(false);
+                      }}
+                      className="block w-full px-4 py-2.5 text-left transition-colors hover:bg-neutral-50"
+                    >
+                      <span className="block text-sm font-medium text-neutral-800">
+                        {option.label}
+                      </span>
+                      {option.description && (
+                        <span className="mt-0.5 block text-xs text-neutral-500">
+                          {option.description}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              }
+
               return (
                 <li key={option.label} role="option" aria-selected={isSelected}>
                   <Link

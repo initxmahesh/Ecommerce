@@ -11,6 +11,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Menu, Phone, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
 import {
   ACCOUNT_LINKS,
   CURRENCIES,
@@ -51,6 +52,7 @@ const mobileNavLinkClassName = ({ isActive }) =>
   }`;
 
 const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activePanel, setActivePanel] = useState(null);
   const [language, setLanguage] = useState("en");
@@ -62,6 +64,31 @@ const Navbar = () => {
     () => cartItems.reduce((sum, item) => sum + item.quantity, 0),
     [cartItems],
   );
+
+  const accountLinks = useMemo(() => {
+    if (!isAuthenticated) {
+      return ACCOUNT_LINKS;
+    }
+
+    return [
+      {
+        label: user?.fullName || "My Account",
+        to: "/account",
+        description: user?.email,
+      },
+      {
+        label: "Sign Out",
+        description: "Log out of your account",
+        onClick: () => {
+          logout();
+        },
+      },
+    ];
+  }, [isAuthenticated, user, logout]);
+
+  const accountLabel = isAuthenticated
+    ? user?.firstName || "Account"
+    : "Account";
 
   const isOverlayOpen = isMenuOpen || activePanel !== null;
 
@@ -173,8 +200,8 @@ const Navbar = () => {
               className="text-white focus:ring-white/50"
             />
             <TopBarSelect
-              label="Account"
-              options={ACCOUNT_LINKS}
+              label={accountLabel}
+              options={accountLinks}
               value="account"
               variant="links"
               className="text-white focus:ring-white/50"
@@ -388,8 +415,8 @@ const Navbar = () => {
                     className="text-neutral-700"
                   />
                   <TopBarSelect
-                    label="Account"
-                    options={ACCOUNT_LINKS}
+                    label={accountLabel}
+                    options={accountLinks}
                     value="account"
                     variant="links"
                     className="text-neutral-700"

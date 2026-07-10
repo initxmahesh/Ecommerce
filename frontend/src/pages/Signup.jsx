@@ -1,6 +1,8 @@
 import { ShoppingBag, Sparkles, Store } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
+import { getAuthErrorMessage } from "../utils/authErrors.js";
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -32,14 +34,71 @@ const inputClassName =
   "h-10 w-full rounded-xl border border-transparent bg-[#f5efe6] px-4 font-Poppins text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-[#1a2b3c]/20 focus:outline-none focus:ring-2 focus:ring-[#1a2b3c]/10";
 
 function Signup() {
+  const { register } = useAuth();
+
   const [userType, setUserType] = useState("buyer");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const data = await register({ name, email, password, userType });
+      setSuccess({
+        message:
+          data.message ||
+          "Account created. Please check your email to verify your account.",
+        devVerifyUrl: data.devVerifyUrl,
+      });
+    } catch (err) {
+      setError(getAuthErrorMessage(err, "Unable to create account."));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (success) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fdfbf7] px-4 py-8">
+        <div className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+          <h2 className="font-Serif text-2xl font-semibold text-[#1a2b3c]">
+            Check your email
+          </h2>
+          <p className="mt-3 font-Poppins text-sm leading-relaxed text-neutral-600">
+            {success.message}
+          </p>
+
+          {success.devVerifyUrl && (
+            <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+              <p className="font-Poppins text-xs font-medium text-amber-900">
+                Development mode
+              </p>
+              <a
+                href={success.devVerifyUrl}
+                className="mt-1 break-all font-Poppins text-sm text-[#1a2b3c] underline underline-offset-2"
+              >
+                Click here to verify your email
+              </a>
+            </div>
+          )}
+
+          <Link
+            to="/login"
+            className="mt-6 inline-flex h-10 w-full items-center justify-center rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55]"
+          >
+            Go to sign in
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -104,7 +163,9 @@ function Signup() {
 
           <button
             type="button"
-            className="mt-5 flex h-10 w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 font-Poppins text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 sm:mt-6"
+            disabled
+            title="Google sign-in is not available yet"
+            className="mt-5 flex h-10 w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50 px-4 font-Poppins text-sm font-medium text-neutral-400 sm:mt-6"
           >
             <GoogleIcon />
             Continue with Google
@@ -118,7 +179,16 @@ function Signup() {
             <div className="h-px flex-1 bg-neutral-200" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            {error && (
+              <p
+                role="alert"
+                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 font-Poppins text-sm text-red-700"
+              >
+                {error}
+              </p>
+            )}
+
             <div>
               <label
                 htmlFor="name"
@@ -128,7 +198,10 @@ function Signup() {
               </label>
               <input
                 id="name"
+                name="name"
                 type="text"
+                autoComplete="name"
+                required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jane Doe"
@@ -145,7 +218,10 @@ function Signup() {
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@gmail.com"
@@ -162,19 +238,27 @@ function Signup() {
               </label>
               <input
                 id="password"
+                name="password"
                 type="password"
+                autoComplete="new-password"
+                required
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="***********"
                 className={inputClassName}
               />
+              <p className="mt-1.5 font-Poppins text-xs text-neutral-500">
+                Must be at least 8 characters.
+              </p>
             </div>
 
             <button
               type="submit"
-              className="h-12 w-full rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55]"
+              disabled={isSubmitting}
+              className="h-12 w-full rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Create account
+              {isSubmitting ? "Creating account..." : "Create account"}
             </button>
           </form>
 

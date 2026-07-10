@@ -1,6 +1,9 @@
 import { Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ApiError } from "../services/apiClient.js";
+import { useAuth } from "../hooks/useAuth.js";
+import { getAuthErrorMessage } from "../utils/authErrors.js";
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -24,16 +27,64 @@ const GoogleIcon = () => (
 );
 
 function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login, resendVerification } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showResend, setShowResend] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
+  const [isResending, setIsResending] = useState(false);
 
-  const handleSubmit = (e) => {
+  const verifiedMessage = location.state?.verified
+    ? "Email verified successfully. You can sign in now."
+    : "";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setResendMessage("");
+    setShowResend(false);
+    setIsSubmitting(true);
+
+    try {
+      await login({ email, password });
+      const redirectTo = location.state?.from ?? "/";
+      navigate(redirectTo, { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError && err.code === "EMAIL_NOT_VERIFIED") {
+        setShowResend(true);
+      }
+      setError(getAuthErrorMessage(err, "Unable to sign in."));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!email.trim()) {
+      setResendMessage("Enter your email above, then try again.");
+      return;
+    }
+
+    setIsResending(true);
+    setResendMessage("");
+
+    try {
+      const data = await resendVerification(email.trim());
+      setResendMessage(data.message || "Verification email sent.");
+    } catch (err) {
+      setResendMessage(getAuthErrorMessage(err, "Unable to resend email."));
+    } finally {
+      setIsResending(false);
+    }
   };
 
   return (
     <div className="flex min-h-screen">
-      {/* Left panel */}
       <div className="relative hidden w-1/2 flex-col justify-between bg-[#1a2b3c] px-8 py-8 lg:flex lg:px-12 lg:py-10">
         <Link to="/" className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
@@ -54,7 +105,6 @@ function Login() {
         </div>
       </div>
 
-      {/* Right panel */}
       <div className="flex w-full flex-col items-center justify-center bg-[#fdfbf7] px-4 py-8 sm:px-6 sm:py-12 lg:w-1/2">
         <div className="w-full max-w-md">
           <div className="mb-6 flex items-center gap-2.5 sm:mb-8 lg:hidden">
@@ -73,9 +123,20 @@ function Login() {
             Sign in to your VendorFlow account.
           </p>
 
+          {verifiedMessage && (
+            <p
+              role="status"
+              className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 font-Poppins text-sm text-emerald-800"
+            >
+              {verifiedMessage}
+            </p>
+          )}
+
           <button
             type="button"
-            className="mt-6 flex h-10 w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 font-Poppins text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 sm:mt-8"
+            disabled
+            title="Google sign-in is not available yet"
+            className="mt-6 flex h-10 w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50 px-4 font-Poppins text-sm font-medium text-neutral-400 sm:mt-8"
           >
             <GoogleIcon />
             Continue with Google
@@ -89,7 +150,16 @@ function Login() {
             <div className="h-px flex-1 bg-neutral-200" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            {error && (
+              <p
+                role="alert"
+                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 font-Poppins text-sm text-red-700"
+              >
+                {error}
+              </p>
+            )}
+
             <div>
               <label
                 htmlFor="email"
@@ -99,7 +169,10 @@ function Login() {
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
@@ -116,7 +189,11 @@ function Login() {
               </label>
               <input
                 id="password"
+                name="password"
                 type="password"
+                autoComplete="current-password"
+                required
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="***********"
@@ -124,11 +201,33 @@ function Login() {
               />
             </div>
 
+            {showResend && (
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <p className="font-Poppins text-sm text-amber-900">
+                  Verify your email before signing in.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={isResending}
+                  className="mt-2 font-Poppins text-sm font-medium text-[#1a2b3c] underline underline-offset-2 disabled:opacity-60"
+                >
+                  {isResending ? "Sending..." : "Resend verification email"}
+                </button>
+                {resendMessage && (
+                  <p className="mt-2 font-Poppins text-xs text-amber-800">
+                    {resendMessage}
+                  </p>
+                )}
+              </div>
+            )}
+
             <button
               type="submit"
-              className="h-12 w-full rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55]"
+              disabled={isSubmitting}
+              className="h-12 w-full rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Sign in
+              {isSubmitting ? "Signing in..." : "Sign in"}
             </button>
           </form>
 

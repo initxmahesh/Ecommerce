@@ -15,9 +15,8 @@ function setRefreshCookie(res, refreshToken) {
 }
 
 function clearRefreshCookie(res) {
-  res.clearCookie(AUTH_COOKIE.REFRESH_TOKEN, {
-    path: "/api/auth",
-  });
+  const { maxAge: _maxAge, ...options } = getRefreshCookieOptions();
+  res.clearCookie(AUTH_COOKIE.REFRESH_TOKEN, options);
 }
 
 export const register = asyncHandler(async (req, res) => {
@@ -69,7 +68,8 @@ export const refresh = asyncHandler(async (req, res) => {
 });
 
 export const verifyEmail = asyncHandler(async (req, res) => {
-  const token = req.body.token || req.query.token;
+  const token =
+    req.method === "GET" ? req.query.token : req.body?.token;
   const data = validateVerifyEmail({ token });
   const result = await authService.verifyEmail(data.token);
 
