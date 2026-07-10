@@ -6,6 +6,8 @@ export default {
       Roboto: ["Roboto", "sans-serif"],
       Poppins: ["Poppins", "sans-serif"],
       Serif: ["Cormorant Garamond", "serif"],
+      admin: ["DM Sans", "sans-serif"],
+      mono: ["JetBrains Mono", "ui-monospace", "monospace"],
     },
     extend: {
       colors: {
