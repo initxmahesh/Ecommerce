@@ -91,7 +91,7 @@ export const DASH_KPIS = [
   { label: "Platform Fee", value: "$412K", change: "-2.3%", cc: "#ef4444" },
 ];
 
-export const REV_BARS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"].map(
+export const REV_BARS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map(
   (l, i) => {
     const v = [65, 72, 68, 80, 75, 88, 92, 85, 95, 90, 98, 100][i];
     return { l, h: `${v}%`, bg: v >= 90 ? "#6366f1" : "#a5b4fc" };

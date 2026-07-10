@@ -2,9 +2,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GuestRoute from "./components/auth/GuestRoute.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import SuperAdminRoute from "./components/auth/SuperAdminRoute.jsx";
+import SupportAgentRoute from "./components/auth/SupportAgentRoute.jsx";
 import AuthLayout from "./layouts/AuthLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import SuperAdminLayout from "./layouts/SuperAdminLayout.jsx";
+import SupportAgentLayout from "./layouts/SupportAgentLayout.jsx";
 import Deals from "./pages/Deals.jsx";
 import Home from "./pages/Home.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
@@ -29,6 +31,12 @@ import ModerationPage from "./pages/superadmin/ModerationPage.jsx";
 import RevenuePage from "./pages/superadmin/RevenuePage.jsx";
 import UsersPage from "./pages/superadmin/UsersPage.jsx";
 import GenericSectionPage from "./pages/superadmin/GenericSectionPage.jsx";
+import SupportDashboardHome from "./pages/support/DashboardHome.jsx";
+import SupportTicketsPage from "./pages/support/TicketsPage.jsx";
+import SupportLiveChatPage from "./pages/support/LiveChatPage.jsx";
+import SupportCustomersPage from "./pages/support/CustomersPage.jsx";
+import SupportKnowledgeBasePage from "./pages/support/KnowledgeBasePage.jsx";
+import SupportGenericSectionPage from "./pages/support/GenericSectionPage.jsx";
 
 function App() {
   return (
@@ -75,6 +83,17 @@ function App() {
             <Route path="revenue" element={<RevenuePage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path=":section" element={<GenericSectionPage />} />
+          </Route>
+        </Route>
+
+        <Route element={<SupportAgentRoute />}>
+          <Route path="/support" element={<SupportAgentLayout />}>
+            <Route index element={<SupportDashboardHome />} />
+            <Route path="tickets" element={<SupportTicketsPage />} />
+            <Route path="chat" element={<SupportLiveChatPage />} />
+            <Route path="customers" element={<SupportCustomersPage />} />
+            <Route path="kb" element={<SupportKnowledgeBasePage />} />
+            <Route path=":section" element={<SupportGenericSectionPage />} />
           </Route>
         </Route>
       </Routes>
