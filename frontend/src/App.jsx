@@ -3,10 +3,12 @@ import GuestRoute from "./components/auth/GuestRoute.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import SuperAdminRoute from "./components/auth/SuperAdminRoute.jsx";
 import SupportAgentRoute from "./components/auth/SupportAgentRoute.jsx";
+import FinanceRoute from "./components/auth/FinanceRoute.jsx";
 import AuthLayout from "./layouts/AuthLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import SuperAdminLayout from "./layouts/SuperAdminLayout.jsx";
 import SupportAgentLayout from "./layouts/SupportAgentLayout.jsx";
+import FinanceLayout from "./layouts/FinanceLayout.jsx";
 import Deals from "./pages/Deals.jsx";
 import Home from "./pages/Home.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
@@ -37,6 +39,12 @@ import SupportLiveChatPage from "./pages/support/LiveChatPage.jsx";
 import SupportCustomersPage from "./pages/support/CustomersPage.jsx";
 import SupportKnowledgeBasePage from "./pages/support/KnowledgeBasePage.jsx";
 import SupportGenericSectionPage from "./pages/support/GenericSectionPage.jsx";
+import FinanceDashboardHome from "./pages/finance/DashboardHome.jsx";
+import FinanceTransactionsPage from "./pages/finance/TransactionsPage.jsx";
+import FinancePayoutsPage from "./pages/finance/PayoutsPage.jsx";
+import FinanceRefundsPage from "./pages/finance/RefundsPage.jsx";
+import FinanceInvoicesPage from "./pages/finance/InvoicesPage.jsx";
+import FinanceGenericSectionPage from "./pages/finance/GenericSectionPage.jsx";
 
 function App() {
   return (
@@ -94,6 +102,17 @@ function App() {
             <Route path="customers" element={<SupportCustomersPage />} />
             <Route path="kb" element={<SupportKnowledgeBasePage />} />
             <Route path=":section" element={<SupportGenericSectionPage />} />
+          </Route>
+        </Route>
+
+        <Route element={<FinanceRoute />}>
+          <Route path="/finance" element={<FinanceLayout />}>
+            <Route index element={<FinanceDashboardHome />} />
+            <Route path="transactions" element={<FinanceTransactionsPage />} />
+            <Route path="payouts" element={<FinancePayoutsPage />} />
+            <Route path="refunds" element={<FinanceRefundsPage />} />
+            <Route path="invoices" element={<FinanceInvoicesPage />} />
+            <Route path=":section" element={<FinanceGenericSectionPage />} />
           </Route>
         </Route>
       </Routes>
