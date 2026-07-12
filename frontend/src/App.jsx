@@ -4,11 +4,13 @@ import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import SuperAdminRoute from "./components/auth/SuperAdminRoute.jsx";
 import SupportAgentRoute from "./components/auth/SupportAgentRoute.jsx";
 import FinanceRoute from "./components/auth/FinanceRoute.jsx";
+import VendorOwnerRoute from "./components/auth/VendorOwnerRoute.jsx";
 import AuthLayout from "./layouts/AuthLayout.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import SuperAdminLayout from "./layouts/SuperAdminLayout.jsx";
 import SupportAgentLayout from "./layouts/SupportAgentLayout.jsx";
 import FinanceLayout from "./layouts/FinanceLayout.jsx";
+import VendorOwnerLayout from "./layouts/VendorOwnerLayout.jsx";
 import Deals from "./pages/Deals.jsx";
 import Home from "./pages/Home.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
@@ -45,6 +47,12 @@ import FinancePayoutsPage from "./pages/finance/PayoutsPage.jsx";
 import FinanceRefundsPage from "./pages/finance/RefundsPage.jsx";
 import FinanceInvoicesPage from "./pages/finance/InvoicesPage.jsx";
 import FinanceGenericSectionPage from "./pages/finance/GenericSectionPage.jsx";
+import VendorDashboardHome from "./pages/vendor/DashboardHome.jsx";
+import VendorProductsPage from "./pages/vendor/ProductsPage.jsx";
+import VendorAddProductPage from "./pages/vendor/AddProductPage.jsx";
+import VendorOrdersPage from "./pages/vendor/OrdersPage.jsx";
+import VendorInventoryPage from "./pages/vendor/InventoryPage.jsx";
+import VendorGenericSectionPage from "./pages/vendor/GenericSectionPage.jsx";
 
 function App() {
   return (
@@ -113,6 +121,17 @@ function App() {
             <Route path="refunds" element={<FinanceRefundsPage />} />
             <Route path="invoices" element={<FinanceInvoicesPage />} />
             <Route path=":section" element={<FinanceGenericSectionPage />} />
+          </Route>
+        </Route>
+
+        <Route element={<VendorOwnerRoute />}>
+          <Route path="/vendor" element={<VendorOwnerLayout />}>
+            <Route index element={<VendorDashboardHome />} />
+            <Route path="products" element={<VendorProductsPage />} />
+            <Route path="products/new" element={<VendorAddProductPage />} />
+            <Route path="orders" element={<VendorOrdersPage />} />
+            <Route path="inventory" element={<VendorInventoryPage />} />
+            <Route path=":section" element={<VendorGenericSectionPage />} />
           </Route>
         </Route>
       </Routes>
