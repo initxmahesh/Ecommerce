@@ -327,4 +327,34 @@ export const PERMISSIONS = [
     name: "Manage Categories",
     description: "Create and update product categories",
   },
+
+  // Import / Export
+  {
+    module: "products",
+    action: "import",
+    resource: "product",
+    name: "Import Products",
+    description: "Import products from CSV, Excel, or JSON",
+  },
+  {
+    module: "products",
+    action: "export",
+    resource: "product",
+    name: "Export Products",
+    description: "Export products to CSV, Excel, or JSON",
+  },
+  {
+    module: "inventory",
+    action: "import",
+    resource: "inventory",
+    name: "Import Inventory",
+    description: "Import inventory stock levels from files",
+  },
+  {
+    module: "inventory",
+    action: "export",
+    resource: "inventory",
+    name: "Export Inventory",
+    description: "Export inventory stock levels to files",
+  },
 ];

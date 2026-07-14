@@ -1,3 +1,4 @@
+import multer from "multer";
 import AppError from "../utils/AppError.js";
 
 export function errorHandler(err, _req, res, _next) {
@@ -24,6 +25,14 @@ export function errorHandler(err, _req, res, _next) {
       success: false,
       message: `${field} already exists`,
       code: "DUPLICATE_KEY",
+    });
+  }
+
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({
+      success: false,
+      message: err.message,
+      code: "UPLOAD_ERROR",
     });
   }
 
