@@ -11,8 +11,7 @@ import InlineSearchField from "../../components/dashboard/InlineSearchField.jsx"
 import DateRangeFilter, {
   matchesDateRange,
 } from "../../components/dashboard/DateRangeFilter.jsx";
-import { downloadCsv, downloadJson } from "../../utils/clientExport.js";
-import ModalShell from "../../modules/import-export/components/shared/ModalShell.jsx";
+import { downloadCsv } from "../../utils/clientExport.js";
 
 function parseOrderDate(label) {
   if (!label) return null;
@@ -26,83 +25,20 @@ function parseOrderDate(label) {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-function OrdersExportModal({ open, onClose, rows, onNotify }) {
-  const [format, setFormat] = useState("csv");
-
-  const run = () => {
-    const headers = ["id", "customer", "items", "total", "status", "date"];
-    const mapped = rows.map((r) => ({
-      id: r.id,
-      customer: r.customer,
-      items: r.items,
-      total: r.total,
-      status: r.status,
-      date: r.date,
-    }));
-
-    if (format === "json") {
-      downloadJson(`orders-export-${Date.now()}`, mapped);
-    } else {
-      downloadCsv(`orders-export-${Date.now()}`, headers, mapped);
-    }
-    onNotify?.(`Exported ${mapped.length} orders`);
-    onClose?.();
-  };
-
-  return (
-    <ModalShell
-      open={open}
-      onClose={onClose}
-      title="Export orders"
-      subtitle="Download the currently filtered order list"
-      footer={
-        <>
-          <button
-            type="button"
-            onClick={onClose}
-            className="cursor-pointer rounded-md border border-slate-200 px-3.5 py-1.5 text-[13px]"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={run}
-            className="cursor-pointer rounded-md bg-emerald-500 px-3.5 py-1.5 text-[13px] font-medium text-white hover:bg-emerald-600"
-          >
-            Export {rows.length} orders
-          </button>
-        </>
-      }
-    >
-      <div className="mb-1 text-xs font-medium text-slate-700">Format</div>
-      <div className="flex gap-2">
-        {[
-          { id: "csv", label: "CSV" },
-          { id: "json", label: "JSON" },
-        ].map((fmt) => (
-          <button
-            key={fmt.id}
-            type="button"
-            onClick={() => setFormat(fmt.id)}
-            className={`cursor-pointer rounded-md px-3 py-1.5 text-[13px] ${
-              format === fmt.id
-                ? "bg-emerald-500 text-white"
-                : "border border-slate-200 bg-white"
-            }`}
-          >
-            {fmt.label}
-          </button>
-        ))}
-      </div>
-    </ModalShell>
-  );
-}
+const ORDER_EXPORT_HEADERS = [
+  "id",
+  "customer",
+  "items",
+  "total",
+  "status",
+  "date",
+];
 
 function OrdersPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [search, setSearch] = useState("");
   const [dateRange, setDateRange] = useState({ preset: "all" });
-  const [exportOpen, setExportOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const { showToast } = useVendorOwnerUi();
 
   const filtered = useMemo(() => {
@@ -120,7 +56,6 @@ function OrdersPage() {
         return false;
       }
       if (!parsed && dateRange.preset !== "all") {
-        // Keep "Today" label rows when filtering today
         if (dateRange.preset === "today" && o.date === "Today") return true;
         if (dateRange.preset !== "today") return o.date === "Today" ? false : true;
       }
@@ -128,17 +63,37 @@ function OrdersPage() {
     });
   }, [activeTab, search, dateRange]);
 
+  const handleExport = () => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      const rows = filtered.map((r) => ({
+        id: r.id,
+        customer: r.customer,
+        items: r.items,
+        total: r.total,
+        status: r.status,
+        date: r.date,
+      }));
+      downloadCsv(`orders-export-${Date.now()}`, ORDER_EXPORT_HEADERS, rows);
+      showToast(`Exported ${rows.length} orders as CSV`);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
-    <div className="flex-1 p-4 md:p-4">
+    <div className="flex-1 p-4 md:p-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="text-xl font-bold">Orders</div>
         <button
           type="button"
-          onClick={() => setExportOpen(true)}
-          className="cursor-pointer rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[13px] text-gray-700 hover:border-slate-300"
+          onClick={handleExport}
+          disabled={exporting}
+          className="cursor-pointer rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[13px] text-gray-700 hover:border-slate-300 disabled:opacity-60"
         >
           <MaterialIcon name="download" size={14} className="align-[-2px]" />{" "}
-          Export
+          {exporting ? "Exporting…" : "Export"}
         </button>
       </div>
 
@@ -241,13 +196,6 @@ function OrdersPage() {
           </div>
         </div>
       </div>
-
-      <OrdersExportModal
-        open={exportOpen}
-        onClose={() => setExportOpen(false)}
-        rows={filtered}
-        onNotify={showToast}
-      />
     </div>
   );
 }
