@@ -24,7 +24,7 @@ export function clearAccessToken() {
   accessToken = null;
 }
 
-async function parseResponse(response) {
+async function parseJsonResponse(response) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
@@ -44,12 +44,12 @@ export async function refreshSession() {
     credentials: "include",
   });
 
-  const data = await parseResponse(response);
+  const data = await parseJsonResponse(response);
   setAccessToken(data.accessToken);
   return data;
 }
 
-export async function apiRequest(path, options = {}) {
+async function withAuthRetry(path, options = {}) {
   const { skipAuth = false, retry = true, ...fetchOptions } = options;
   const headers = new Headers(fetchOptions.headers ?? {});
 
@@ -89,7 +89,7 @@ export async function apiRequest(path, options = {}) {
       }
 
       await refreshPromise;
-      return apiRequest(path, { ...options, retry: false });
+      return withAuthRetry(path, { ...options, retry: false });
     } catch {
       clearAccessToken();
       throw new ApiError(
@@ -100,5 +100,52 @@ export async function apiRequest(path, options = {}) {
     }
   }
 
-  return parseResponse(response);
+  return response;
+}
+
+export async function apiRequest(path, options = {}) {
+  const response = await withAuthRetry(path, options);
+  return parseJsonResponse(response);
+}
+
+/** Multipart upload (do not set Content-Type — browser sets boundary). */
+export async function apiUpload(path, formData, options = {}) {
+  const response = await withAuthRetry(path, {
+    ...options,
+    method: options.method || "POST",
+    body: formData,
+  });
+  return parseJsonResponse(response);
+}
+
+/** Binary download with auth + refresh. */
+export async function apiDownload(path, options = {}) {
+  const response = await withAuthRetry(path, options);
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new ApiError(
+      data.message || "Download failed",
+      response.status,
+      data.code,
+    );
+  }
+
+  const blob = await response.blob();
+  const disposition = response.headers.get("Content-Disposition") || "";
+  const match = disposition.match(/filename="?([^"]+)"?/i);
+  return {
+    blob,
+    filename: match?.[1] || "download",
+  };
+}
+
+export function triggerBrowserDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
