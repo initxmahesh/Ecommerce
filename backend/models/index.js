@@ -12,6 +12,10 @@ import EmailVerification from "./EmailVerification.js";
 import PasswordResetToken from "./PasswordResetToken.js";
 import AuditLog from "./AuditLog.js";
 import SocialAccount from "./SocialAccount.js";
+import Vendor from "./Vendor.js";
+import Product from "./Product.js";
+import InventoryItem from "./InventoryItem.js";
+import ImportExportJob from "./ImportExportJob.js";
 
 export {
   User,
@@ -28,4 +32,8 @@ export {
   PasswordResetToken,
   AuditLog,
   SocialAccount,
+  Vendor,
+  Product,
+  InventoryItem,
+  ImportExportJob,
 };
