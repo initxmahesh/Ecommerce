@@ -1,5 +1,7 @@
 import { useSupportAgentUi } from "../../context/supportAgentUiContext.js";
+import { SUPPORT_SEARCH_GROUPS } from "../../data/dashboardSearchConfig.js";
 import MaterialIcon from "../superadmin/MaterialIcon.jsx";
+import DashboardSearch from "../dashboard/DashboardSearch.jsx";
 
 function SupportAgentTopBar() {
   const { isMobile, pageTitle, openSidebar } = useSupportAgentUi();
@@ -26,15 +28,11 @@ function SupportAgentTopBar() {
         <span className="text-xs font-medium text-emerald-600">Available</span>
       </div>
 
-      <button
-        type="button"
-        className="flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 hover:border-slate-300"
-      >
-        <MaterialIcon name="search" size={16} className="text-slate-400" />
-        <span className="hidden text-[13px] text-slate-400 sm:inline">
-          Search tickets…
-        </span>
-      </button>
+      <DashboardSearch
+        groups={SUPPORT_SEARCH_GROUPS}
+        placeholder="Search tickets…"
+        triggerWidthClass="w-auto sm:w-[200px]"
+      />
     </header>
   );
 }

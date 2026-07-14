@@ -1,5 +1,7 @@
 import { useSuperAdminUi } from "../../context/superAdminUiContext.js";
+import { SUPERADMIN_SEARCH_GROUPS } from "../../data/dashboardSearchConfig.js";
 import MaterialIcon from "./MaterialIcon.jsx";
+import DashboardSearch from "../dashboard/DashboardSearch.jsx";
 
 function SuperAdminTopBar() {
   const { isMobile, pageTitle, openSidebar } = useSuperAdminUi();
@@ -25,13 +27,12 @@ function SuperAdminTopBar() {
 
       <div className="flex-1" />
 
-      <button
-        type="button"
-        className="flex w-[120px] cursor-pointer items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 hover:border-slate-300 md:w-[240px]"
-      >
-        <MaterialIcon name="search" size={18} className="text-slate-400" />
-        <span className="text-[13px] text-slate-400">Search…⌘K</span>
-      </button>
+      <DashboardSearch
+        groups={SUPERADMIN_SEARCH_GROUPS}
+        placeholder="Search…"
+        shortcutLabel="⌘K"
+        triggerWidthClass="w-[120px] md:w-[240px]"
+      />
 
       <button
         type="button"

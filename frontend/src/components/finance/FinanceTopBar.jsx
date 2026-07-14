@@ -1,5 +1,7 @@
 import { useFinanceUi } from "../../context/financeUiContext.js";
+import { FINANCE_SEARCH_GROUPS } from "../../data/dashboardSearchConfig.js";
 import MaterialIcon from "../superadmin/MaterialIcon.jsx";
+import DashboardSearch from "../dashboard/DashboardSearch.jsx";
 
 function FinanceTopBar() {
   const { isMobile, pageTitle, openSidebar } = useFinanceUi();
@@ -21,13 +23,12 @@ function FinanceTopBar() {
 
       <div className="flex-1" />
 
-      <button
-        type="button"
-        className="flex w-[120px] cursor-pointer items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-50 px-3 py-1.5 hover:border-zinc-300 sm:w-[200px]"
-      >
-        <MaterialIcon name="search" size={16} className="text-zinc-400" />
-        <span className="text-[13px] text-zinc-400">Search…</span>
-      </button>
+      <DashboardSearch
+        groups={FINANCE_SEARCH_GROUPS}
+        placeholder="Search…"
+        triggerClassName="border-zinc-200 bg-zinc-50 hover:border-zinc-300"
+        triggerWidthClass="w-[120px] sm:w-[200px]"
+      />
     </header>
   );
 }
