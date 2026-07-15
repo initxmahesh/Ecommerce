@@ -1,6 +1,6 @@
 import { ShoppingBag, Sparkles, Store } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { getAuthErrorMessage } from "../utils/authErrors.js";
 
@@ -25,28 +25,58 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const userTypes = [
-  { id: "buyer", label: "I'm a buyer", icon: ShoppingBag },
-  { id: "seller", label: "I'm a seller", icon: Store },
+const ACCOUNT_TYPES = [
+  {
+    id: "buyer",
+    label: "I'm a buyer",
+    icon: ShoppingBag,
+  },
+  {
+    id: "seller",
+    label: "I'm a vendor",
+    icon: Store,
+  },
 ];
 
 const inputClassName =
   "h-10 w-full rounded-xl border border-transparent bg-[#f5efe6] px-4 font-Poppins text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-[#1a2b3c]/20 focus:outline-none focus:ring-2 focus:ring-[#1a2b3c]/10";
 
+function resolveInitialType(searchParams) {
+  const raw = (searchParams.get("type") || "").toLowerCase();
+  if (raw === "seller" || raw === "vendor") return "seller";
+  return "buyer";
+}
+
 function Signup() {
   const { register } = useAuth();
+  const [searchParams] = useSearchParams();
 
-  const [userType, setUserType] = useState("buyer");
+  const [userType, setUserType] = useState(() =>
+    resolveInitialType(searchParams),
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [typeError, setTypeError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(null);
+
+  const selectedType = useMemo(
+    () => ACCOUNT_TYPES.find((type) => type.id === userType),
+    [userType],
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setTypeError("");
+
+    if (!ACCOUNT_TYPES.some((type) => type.id === userType)) {
+      setTypeError("Select whether you are a buyer or a vendor.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -56,6 +86,7 @@ function Signup() {
           data.message ||
           "Account created. Please check your email to verify your account.",
         devVerifyUrl: data.devVerifyUrl,
+        userType,
       });
     } catch (err) {
       setError(getAuthErrorMessage(err, "Unable to create account."));
@@ -73,6 +104,11 @@ function Signup() {
           </h2>
           <p className="mt-3 font-Poppins text-sm leading-relaxed text-neutral-600">
             {success.message}
+          </p>
+          <p className="mt-2 font-Poppins text-xs text-neutral-500">
+            {success.userType === "seller"
+              ? "After verification, sign in to open your vendor dashboard."
+              : "After verification, sign in to shop, save favorites, and checkout."}
           </p>
 
           {success.devVerifyUrl && (
@@ -117,7 +153,7 @@ function Signup() {
             The marketplace OS built for ambitious operators.
           </h1>
           <p className="mt-4 font-Poppins text-sm leading-relaxed text-white/70 sm:text-base">
-            Buyers shop. Sellers sell. Admins orchestrate.
+            Buyers shop. Vendors sell. Admins orchestrate.
           </p>
         </div>
       </div>
@@ -141,7 +177,7 @@ function Signup() {
           </p>
 
           <div className="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:mt-8">
-            {userTypes.map(({ id, label, icon: Icon }) => {
+            {ACCOUNT_TYPES.map(({ id, label, icon: Icon }) => {
               const isSelected = userType === id;
               return (
                 <button
@@ -258,7 +294,11 @@ function Signup() {
               disabled={isSubmitting}
               className="h-12 w-full rounded-xl bg-[#1a2b3c] px-4 font-Poppins text-sm font-medium text-white transition-colors hover:bg-[#243b55] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isSubmitting ? "Creating account..." : "Create account"}
+              {isSubmitting
+                ? "Creating account..."
+                : userType === "seller"
+                  ? "Create vendor account"
+                  : "Create buyer account"}
             </button>
           </form>
 

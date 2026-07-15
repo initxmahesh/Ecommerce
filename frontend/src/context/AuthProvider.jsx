@@ -6,6 +6,12 @@ import {
 } from "react";
 import { AuthContext } from "./authContext.js";
 import * as authApi from "../services/authApi.js";
+import {
+  getDashboardLinkForUser,
+  getHomePathForUser,
+  getRoleNames,
+  hasAnyRole,
+} from "../utils/roles.js";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -69,18 +75,36 @@ export function AuthProvider({ children }) {
     return authApi.resendVerification(email);
   }, []);
 
+  const checkRole = useCallback(
+    (allowedRoles) => hasAnyRole(user, allowedRoles),
+    [user],
+  );
+
   const value = useMemo(
     () => ({
       user,
       isLoading,
       isAuthenticated: Boolean(user),
+      roles: getRoleNames(user),
+      hasRole: checkRole,
+      homePath: getHomePathForUser(user),
+      dashboardLink: getDashboardLinkForUser(user),
       login,
       register,
       logout,
       resendVerification,
       refreshSession: bootstrap,
     }),
-    [user, isLoading, login, register, logout, resendVerification, bootstrap],
+    [
+      user,
+      isLoading,
+      checkRole,
+      login,
+      register,
+      logout,
+      resendVerification,
+      bootstrap,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

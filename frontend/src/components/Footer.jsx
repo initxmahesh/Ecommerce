@@ -8,6 +8,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
+import { ROLE_GROUPS, hasAnyRole } from "../utils/roles.js";
 
 const shopLinks = [
   { label: "Browse Categories", to: "/products" },
@@ -18,11 +20,11 @@ const shopLinks = [
 ];
 
 const sellWithUsLinks = [
-  { label: "Become a Seller", to: "/register" },
-  { label: "Seller Dashboard", to: "#" },
-  { label: "Seller Resources", to: "/seller-resources" },
-  { label: "Seller Policies", to: "/seller-policies" },
-  { label: "Seller Support", to: "/seller-support" },
+  { label: "Become a Seller", to: "/register?type=vendor" },
+  { label: "Seller Dashboard", to: "/vendor", requiresVendor: true },
+  { label: "Seller Resources", to: "/faq" },
+  { label: "Seller Policies", to: "/faq" },
+  { label: "Seller Support", to: "/faq" },
 ];
 
 const customerCareLinks = [
@@ -151,9 +153,10 @@ const socialLinks = [
   },
 ];
 
-const FooterLink = ({ to, children }) => (
+const FooterLink = ({ to, state, children }) => (
   <Link
     to={to}
+    state={state}
     className="text-sm text-neutral-600 transition-colors hover:text-neutral-900"
   >
     {children}
@@ -166,7 +169,9 @@ const LinkColumn = ({ title, links }) => (
     <ul className="space-y-2">
       {links.map((link) => (
         <li key={link.label} className="flex items-start gap-2">
-          <FooterLink to={link.to}>{link.label}</FooterLink>
+          <FooterLink to={link.to} state={link.state}>
+            {link.label}
+          </FooterLink>
         </li>
       ))}
     </ul>
@@ -174,6 +179,27 @@ const LinkColumn = ({ title, links }) => (
 );
 
 const Footer = () => {
+  const { user, isAuthenticated } = useAuth();
+  const isVendor = hasAnyRole(user, ROLE_GROUPS.VENDOR);
+
+  const sellLinks = sellWithUsLinks.map((link) => {
+    if (!link.requiresVendor) return link;
+    if (isAuthenticated && isVendor) {
+      return { label: link.label, to: "/vendor" };
+    }
+    return {
+      label: link.label,
+      to: "/login",
+      state: { from: "/vendor", intent: "continue" },
+    };
+  });
+
+  const columns = linkColumns.map((column) =>
+    column.title === "Sell with Us"
+      ? { ...column, links: sellLinks }
+      : column,
+  );
+
   return (
     <footer className="font-Poppins">
       <div className="border-t border-neutral-200 bg-neutral-50 py-8 sm:py-10">
@@ -219,7 +245,7 @@ const Footer = () => {
           {/* Link columns */}
           <div className="min-w-0 flex-1">
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 sm:gap-8 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-8 xl:gap-y-0">
-              {linkColumns.map((column) => (
+              {columns.map((column) => (
                 <LinkColumn key={column.title} {...column} />
               ))}
             </div>

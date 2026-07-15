@@ -4,6 +4,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ApiError } from "../services/apiClient.js";
 import { useAuth } from "../hooks/useAuth.js";
 import { getAuthErrorMessage } from "../utils/authErrors.js";
+import { getHomePathForUser } from "../utils/roles.js";
+
+const INTENT_COPY = {
+  cart: "Sign in to manage your cart and checkout.",
+  wishlist: "Sign in to save products to your wishlist.",
+  continue: "Sign in to continue where you left off.",
+};
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -26,6 +33,13 @@ const GoogleIcon = () => (
   </svg>
 );
 
+function resolvePostLoginPath(from, user) {
+  if (from && from !== "/login" && from !== "/register") {
+    return from;
+  }
+  return getHomePathForUser(user);
+}
+
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +56,9 @@ function Login() {
   const verifiedMessage = location.state?.verified
     ? "Email verified successfully. You can sign in now."
     : "";
+  const intentMessage =
+    INTENT_COPY[location.state?.intent] ??
+    (location.state?.from ? INTENT_COPY.continue : "");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,8 +68,8 @@ function Login() {
     setIsSubmitting(true);
 
     try {
-      await login({ email, password });
-      const redirectTo = location.state?.from ?? "/";
+      const data = await login({ email, password });
+      const redirectTo = resolvePostLoginPath(location.state?.from, data.user);
       navigate(redirectTo, { replace: true });
     } catch (err) {
       if (err instanceof ApiError && err.code === "EMAIL_NOT_VERIFIED") {
@@ -129,6 +146,15 @@ function Login() {
               className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 font-Poppins text-sm text-emerald-800"
             >
               {verifiedMessage}
+            </p>
+          )}
+
+          {intentMessage && !verifiedMessage && (
+            <p
+              role="status"
+              className="mt-4 rounded-xl border border-[#1a2b3c]/10 bg-white px-4 py-3 font-Poppins text-sm text-[#1a2b3c]"
+            >
+              {intentMessage}
             </p>
           )}
 

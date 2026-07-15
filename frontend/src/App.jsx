@@ -53,6 +53,7 @@ import VendorAddProductPage from "./pages/vendor/AddProductPage.jsx";
 import VendorOrdersPage from "./pages/vendor/OrdersPage.jsx";
 import VendorInventoryPage from "./pages/vendor/InventoryPage.jsx";
 import VendorGenericSectionPage from "./pages/vendor/GenericSectionPage.jsx";
+import Forbidden from "./pages/Forbidden.jsx";
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
         </Route>
 
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forbidden" element={<Forbidden />} />
 
         <Route element={<GuestRoute />}>
           <Route element={<AuthLayout />}>

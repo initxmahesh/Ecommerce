@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.js";
+import { getHomePathForUser } from "../../utils/roles.js";
 
 function AuthLoadingScreen() {
   return (
@@ -10,9 +11,13 @@ function AuthLoadingScreen() {
 }
 
 export default function GuestRoute() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
-  const redirectTo = location.state?.from ?? "/";
+  const from = location.state?.from;
+  const redirectTo =
+    from && from !== "/login" && from !== "/register"
+      ? from
+      : getHomePathForUser(user);
 
   if (isLoading) {
     return <AuthLoadingScreen />;

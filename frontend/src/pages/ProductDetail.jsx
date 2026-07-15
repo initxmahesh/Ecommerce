@@ -4,13 +4,15 @@ import { Link, useParams } from "react-router-dom";
 import ProductImageGallery from "../components/product/ProductImageGallery.jsx";
 import ProductTabs from "../components/product/ProductTabs.jsx";
 import RelatedProducts from "../components/product/RelatedProducts.jsx";
-import {
-  getProductById,
-  getRelatedProducts,
-} from "../data/productsData.js";
+import { getProductById, getRelatedProducts } from "../data/productsData.js";
+import { useCart } from "../hooks/useCart.js";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
 
 const StarRating = ({ rating }) => (
-  <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+  <div
+    className="flex items-center gap-0.5"
+    aria-label={`${rating} out of 5 stars`}
+  >
     {Array.from({ length: 5 }, (_, index) => (
       <Star
         key={index}
@@ -26,8 +28,14 @@ const StarRating = ({ rating }) => (
 );
 
 const ProductDetailView = ({ product, relatedProducts }) => {
+  const requireAuth = useRequireAuth();
+  const { addToCart, toggleWishlist, isInWishlist } = useCart();
+
   const [selectedWeight, setSelectedWeight] = useState(product.weights[0]);
   const [quantity, setQuantity] = useState(1);
+  const [cartFeedback, setCartFeedback] = useState("");
+
+  const wishlisted = isInWishlist(product.id);
 
   const decreaseQuantity = () => {
     setQuantity((current) => Math.max(1, current - 1));
@@ -35,6 +43,29 @@ const ProductDetailView = ({ product, relatedProducts }) => {
 
   const increaseQuantity = () => {
     setQuantity((current) => current + 1);
+  };
+
+  const handleAddToCart = () => {
+    if (!requireAuth("cart")) return;
+    const ok = addToCart(
+      {
+        ...product,
+        image: product.image ?? product.gallery?.[0],
+      },
+      quantity,
+    );
+    if (ok) {
+      setCartFeedback("Added to cart");
+      window.setTimeout(() => setCartFeedback(""), 2000);
+    }
+  };
+
+  const handleToggleWishlist = () => {
+    if (!requireAuth("wishlist")) return;
+    toggleWishlist({
+      ...product,
+      image: product.image ?? product.gallery?.[0],
+    });
   };
 
   return (
@@ -75,7 +106,8 @@ const ProductDetailView = ({ product, relatedProducts }) => {
 
             <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
               <span className="text-neutral-600">
-                SKU#: <span className="font-medium text-black/70">{product.sku}</span>
+                SKU#:{" "}
+                <span className="font-medium text-black/70">{product.sku}</span>
               </span>
               <span
                 className={`font-semibold uppercase tracking-wide ${
@@ -106,7 +138,7 @@ const ProductDetailView = ({ product, relatedProducts }) => {
                     key={weight}
                     type="button"
                     onClick={() => setSelectedWeight(weight)}
-                    className={`min-w-[4.5rem] rounded-md border px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-primary/30 ${
+                    className={`min-w-[4.5rem] rounded-md border px-4 py-2 text-sm font-medium transition ${
                       selectedWeight === weight
                         ? "border-primary bg-primary text-white"
                         : "border-neutral-200 bg-white text-neutral-600 hover:border-primary/50"
@@ -124,18 +156,18 @@ const ProductDetailView = ({ product, relatedProducts }) => {
                   type="button"
                   aria-label="Decrease quantity"
                   onClick={decreaseQuantity}
-                  className="flex h-full w-10 items-center justify-center text-neutral-600 transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="flex h-full w-8 items-center justify-center text-neutral-600 transition hover:text-primary"
                 >
                   <Minus className="h-4 w-4" strokeWidth={2} />
                 </button>
-                <span className="min-w-[2.5rem] text-center text-sm font-medium text-black/70">
+                <span className="min-w-[1.5rem] text-center text-sm font-medium text-black/70">
                   {quantity}
                 </span>
                 <button
                   type="button"
                   aria-label="Increase quantity"
                   onClick={increaseQuantity}
-                  className="flex h-full w-10 items-center justify-center text-neutral-600 transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="flex h-full w-8 items-center justify-center text-neutral-600 transition hover:text-primary"
                 >
                   <Plus className="h-4 w-4" strokeWidth={2} />
                 </button>
@@ -143,27 +175,41 @@ const ProductDetailView = ({ product, relatedProducts }) => {
 
               <button
                 type="button"
-                className="h-11 flex-1 rounded-md bg-brand px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-brand/90 focus:outline-none focus:ring-2 focus:ring-brand/30 sm:flex-none sm:min-w-[200px]"
+                onClick={handleAddToCart}
+                disabled={!product.inStock}
+                className="h-11 flex-1 rounded-md bg-brand px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:min-w-[200px]"
               >
                 Add to Cart
               </button>
 
               <button
                 type="button"
-                aria-label="Add to wishlist"
-                className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-neutral-600 transition hover:border-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                aria-label={
+                  wishlisted ? "Remove from wishlist" : "Add to wishlist"
+                }
+                aria-pressed={wishlisted}
+                onClick={handleToggleWishlist}
+                className={`flex h-11 w-11 items-center justify-center rounded-md border transition ${
+                  wishlisted
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-neutral-200 text-neutral-600 hover:border-primary hover:text-primary"
+                }`}
               >
-                <Heart className="h-5 w-5" strokeWidth={2} />
-              </button>
-
-              <button
-                type="button"
-                aria-label="Quick view"
-                className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-neutral-600 transition hover:border-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
-              >
-                <Eye className="h-5 w-5" strokeWidth={2} />
+                <Heart
+                  className={`h-5 w-5 ${wishlisted ? "fill-current" : ""}`}
+                  strokeWidth={2}
+                />
               </button>
             </div>
+
+            {cartFeedback && (
+              <p
+                role="status"
+                className="mt-3 text-sm font-medium text-primary"
+              >
+                {cartFeedback}
+              </p>
+            )}
           </div>
         </div>
 
@@ -191,7 +237,7 @@ const ProductDetail = () => {
           </p>
           <Link
             to="/"
-            className="mt-6 inline-flex h-10 items-center rounded-md bg-primary px-5 text-sm font-medium text-white transition hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="mt-6 inline-flex h-10 items-center rounded-md bg-primary px-5 text-sm font-medium text-white transition hover:bg-primary/90"
           >
             Back to Home
           </Link>
